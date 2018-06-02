@@ -84,6 +84,7 @@ def checkFlags():
     global sequence
     if sentFlag:
         print "Sent something"
+        sentFlag = False
         reply.sender    = MY_ADDRESS
         reply.sequence  = sequence
         reply.signal    = lastSignalServiced
@@ -91,6 +92,7 @@ def checkFlags():
             timePollAckSent[sequence]  = DW1000.getTransmitTimestamp()
         replyPub.publish(reply)
     elif receivedFlag:
+        receivedFlag = False
         print "Received something"
         msgType, sender, sequence, node_type = DW1000.getData(4)
         if node_type == NODE_TYPE:
