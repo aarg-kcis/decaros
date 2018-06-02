@@ -28,7 +28,7 @@ def init():
     timestampPub        = rospy.Publisher('anchor_timestamps', AnchorTimeStamps, queue_size=10)
     reply               = ControlSignalReply()
     sequence            = 0
-    lastSignalServiced  = None
+    lastSignalServiced  = SEND_POLL
     rospy.Subscriber('control_signal', ControlSignal, controlSignalCB)
 
 def initDW1000():
@@ -88,7 +88,7 @@ def checkFlags():
         reply.sender    = MY_ADDRESS
         reply.sequence  = sequence
         reply.signal    = lastSignalServiced
-        if  lastSignalServiced == SEND_POLL_ACK:
+        if  lastSignalServiced == SEND_POLL:
             timePollAckSent[sequence]  = DW1000.getTransmitTimestamp()
         replyPub.publish(reply)
     elif receivedFlag:
