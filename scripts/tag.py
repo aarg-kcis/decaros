@@ -28,7 +28,7 @@ def init():
     timestampPub        = rospy.Publisher('tag_timestamps', TagTimeStamps, queue_size=10)
     reply               = ControlSignalReply()
     sequence            = 0
-    lastSignalServiced  = None
+    lastSignalServiced  = SEND_RANGE
     rospy.Subscriber('control_signal', ControlSignal, controlSignalCB)
 
 def initDW1000():
@@ -88,9 +88,9 @@ def checkFlags():
         reply.sender    = MY_ADDRESS
         reply.sequence  = sequence
         reply.signal    = lastSignalServiced
-        if  lastSignalServiced == SEND_POLL:
+        if  lastSignalServiced == SEND_RANGE:
             timePollSent[sequence]  = DW1000.getTransmitTimestamp()
-        elif lastSignalServiced == SEND_RANGE:
+        elif lastSignalServiced == SEND_POLL:
             timeRangeSent[sequence] = DW1000.getTransmitTimestamp()
             timestampPub.publish(getTimeStampForSequence(sequence))
             deletePrevTimeStamps(sequence)
