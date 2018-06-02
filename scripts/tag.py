@@ -49,6 +49,11 @@ def handleSent():
 def handleReceived():
     global receivedFlag
     receivedFlag = True
+    
+def receiver():
+    DW1000.newReceive()
+    DW1000.receivePermanently()
+    DW1000.startReceive()
 
 def controlSignalCB(signal):
     global sequence
@@ -122,6 +127,7 @@ if __name__ == '__main__':
     MY_ADDRESS  = rospy.get_param("~id")
     print("Tag Address: {}".format(MY_ADDRESS))
     init()
+    initDW1000()
     try:
         spin()
     except rospy.ROSInterruptException:

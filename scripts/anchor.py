@@ -50,6 +50,11 @@ def handleReceived():
     global receivedFlag
     receivedFlag = True
 
+def receiver():
+    DW1000.newReceive()
+    DW1000.receivePermanently()
+    DW1000.startReceive()
+
 def controlSignalCB(signal):
     global sequence
     if signal.sender == MY_ADDRESS:
