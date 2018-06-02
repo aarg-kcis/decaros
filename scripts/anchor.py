@@ -61,8 +61,9 @@ def controlSignalCB(signal):
     print signal
     global sequence
     if signal.sender == MY_ADDRESS:
-        if signal.signal == SEND_POLL_ACK:
-            transmitPollAck(signal.sequence)
+        if signal.signal == SEND_POLL_ACK and signal.sequence in timePollReceived.keys():
+            sequence = signal.sequence
+            transmitPollAck(sequence)
 
 def getTimeStampForSequence(seq):
     ts = AnchorTimeStamps()
