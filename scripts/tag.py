@@ -94,7 +94,7 @@ def checkFlags():
         if  lastSignalServiced == SEND_RANGE:
             print "Poll sent for {}".format(sequence)
             timePollSent[sequence]  = DW1000.getTransmitTimestamp()
-        elif lastSignalServiced == SEND_POLL:
+        elif lastSignalServiced == SEND_POLL and signal.sequence in timePollAckReceived.keys():
             print "Range sent for {}".format(sequence)
             timeRangeSent[sequence] = DW1000.getTransmitTimestamp()
             timestampPub.publish(getTimeStampForSequence(sequence))
