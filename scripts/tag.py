@@ -61,9 +61,10 @@ def controlSignalCB(signal):
     print "Received signal"
     print signal
     if signal.sender == MY_ADDRESS:
+        sequence = signal.sequence
         if signal.signal == SEND_POLL:
             transmitPoll(signal.sequence)
-        elif signal.signal == SEND_RANGE:
+        elif signal.signal == SEND_RANGE if signal.sequence in timePollSent.keys():
             transmitRange(signal.sequence)
 
 def getTimeStampForSequence(seq):
