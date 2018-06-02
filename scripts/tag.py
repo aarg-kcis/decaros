@@ -15,6 +15,8 @@ BROADCAST       = 0xFF
 TIMEOUT_TIME    = 1
 RATE            = 100
 NODE_TYPE       = 0 # TAG
+sentFlag        = False
+receivedFlag    = False
 
 def init():
     global replyPub, reply, sequence, lastSignalServiced, timestampPub
