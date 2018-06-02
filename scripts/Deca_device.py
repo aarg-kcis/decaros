@@ -1,4 +1,3 @@
-import DW1000
 import DW1000Constants as C
 
 class DecaDevice:
