@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import rospy
 import time
+import rospy
 from Deca_device import DecaDevice
 from decaros.msg import ControlSignal
 from decaros.msg import ControlSignalReply
@@ -46,7 +46,7 @@ def sendControlSignal(seq, signal, sender, receiver=BROADCAST):
     control.sender      = sender
     control.receiver    = receiver
     controlPub.publish(control)
-    print "{}, {}, {}, {}".format(control.sequence, control.signal, control.sender, control.receiver)
+    # print "{}, {}, {}, {}".format(control.sequence, control.signal, control.sender, control.receiver)
     registerExepectedReply(control)
 
 def wait(sentTime):
@@ -90,6 +90,11 @@ if __name__ == '__main__':
     print ANCHORS
     print TAGS
     populateDeviceLists(ANCHORS, TAGS)
+    for i in anchorList:
+        print anchorList[i]
+    for i in tagList:
+        print tagList[i]
+
     try:
         spin()
     except rospy.ROSInterruptException:

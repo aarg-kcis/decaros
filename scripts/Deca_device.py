@@ -8,7 +8,15 @@ class DecaDevice:
         self.type                   = type_of_tag
         self.is_inactive            = False
         self.sequenceNumber         = 0
-        self.expectedMessage        = C.POLL_ACK if (self.type == DW1000Device.ANCHOR) else C.POLL
+        if type_of_tag == DecaDevice.ANCHOR:
+            self.timePollReceived       = {}
+            self.timePollAckSent        = {}
+            self.timeRangeReceived      = {}
+        if type_of_tag == DecaDevice.TAG:
+            self.timePollSent           = {}
+            self.timePollAckReceived    = {}
+            self.timeRangeSent          = {}
+        self.expectedMessage        = C.POLL_ACK if (self.type == DecaDevice.ANCHOR) else C.POLL
         
     def deletePreviousSequenceData(self):
         for i in self.timestamps:
@@ -30,3 +38,4 @@ class DecaDevice:
         d   = self.__dict__
         for key in d:
             str += "{}: {}\n".format(key, d[key])
+        return str
