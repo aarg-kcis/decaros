@@ -95,9 +95,9 @@ def shutdown():
     rospy.sleep(1)
 
 if __name__ == '__main__':
-    node_name = "tag_{}".format()
-    rospy.init_node(node_name)
     MY_ADDRESS  = rospy.get_param("~id")
+    node_name = "tag_{}".format(MY_ADDRESS)
+    rospy.init_node(node_name)
     print("Tag Address: {}".format(MY_ADDRESS))
     init()
     try:
