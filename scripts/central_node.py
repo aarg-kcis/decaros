@@ -46,7 +46,6 @@ def sendControlSignal(seq, signal, sender, receiver=BROADCAST):
     control.sender      = sender
     control.receiver    = receiver
     controlPub.publish(control)
-    # print "{}, {}, {}, {}".format(control.sequence, control.signal, control.sender, control.receiver)
     registerExepectedReply(control)
 
 def wait(sentTime):
@@ -87,14 +86,9 @@ if __name__ == '__main__':
     init()
     ANCHORS     = map(int, rospy.get_param("~anchors").split(","))
     TAGS        = map(int, rospy.get_param("~tags").split(','))
-    print ANCHORS
-    print TAGS
+    print("Anchors: {}".format(ANCHORS))
+    print("Tags: {}".format(TAGS))
     populateDeviceLists(ANCHORS, TAGS)
-    for i in anchorList:
-        print anchorList[i]
-    for i in tagList:
-        print tagList[i]
-
     try:
         spin()
     except rospy.ROSInterruptException:
