@@ -77,6 +77,7 @@ def getTimeStampForSequence(seq):
     return ts
 
 def deletePrevTimeStamps(seq):
+    global timePollSent, timePollAckReceived, timeRangeSent
     timePollSent        = {seq: timePollSent[seq]}
     timePollAckReceived = {seq: timePollAckReceived[seq]}
     timeRangeSent       = {seq: timeRangeSent[seq]}
