@@ -49,14 +49,17 @@ def handleSent():
 def handleReceived():
     global receivedFlag
     receivedFlag = True
-    
+
 def receiver():
+    print "Initializing receiver"
     DW1000.newReceive()
     DW1000.receivePermanently()
     DW1000.startReceive()
 
 def controlSignalCB(signal):
     global sequence
+    print "Received signal"
+    print signal
     if signal.sender == MY_ADDRESS:
         if signal.signal == SEND_POLL:
             transmitPoll(signal.sequence)
@@ -79,6 +82,7 @@ def deletePrevTimeStamps(seq):
 
 def checkFlags():
     if sentFlag:
+        print "Sent message"
         reply.sender    = MY_ADDRESS
         reply.sequence  = sequence
         reply.signal    = lastSignalServiced
@@ -90,18 +94,21 @@ def checkFlags():
             deletePrevTimeStamps(sequence)
         replyPub.publish(reply)
     elif receivedFlag:
+        print "Received message"
         msgType, sender, sequence, node_type = DW1000.getData(4)
         if node_type == NODE_TYPE:
             return
         timePollAckReceived[sequence] = DW1000.getReceiveTimestamp()
 
 def transmitPoll(sequence):
+    print "Transmitting POLL"
     DW1000.newTransmit()
     DW1000.setData([C.POLL, MY_ADDRESS, sequence, NODE_TYPE], 4)
     DW1000.startTransmit()
     lastSignalServiced = SEND_POLL
 
 def transmitRange(address):
+    print "Transmitting RANGE"
     DW1000.newTransmit()
     DW1000.setData([C.RANGE, MY_ADDRESS, sequence, NODE_TYPE], 4)
     DW1000.startTransmit()
