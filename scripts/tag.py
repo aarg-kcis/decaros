@@ -5,6 +5,7 @@ import DW1000Constants as C
 from Deca_device import DecaDevice
 from decaros.msg import ControlSignal
 from decaros.msg import ControlSignalReply
+from decaros.msg import TagTimeStamps
 
 SEND_POLL       = 1
 SEND_POLL_ACK   = 2
