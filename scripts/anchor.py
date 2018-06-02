@@ -81,6 +81,7 @@ def deletePrevTimeStamps(seq):
 
 
 def checkFlags():
+    global sequence
     if sentFlag:
         print "Sent something"
         reply.sender    = MY_ADDRESS
