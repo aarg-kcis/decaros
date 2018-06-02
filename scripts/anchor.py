@@ -27,6 +27,25 @@ def init():
     lastSignalServiced  = None
     rospy.Subscriber('control_signal', ControlSignal, controlSignalCB)
 
+def initDW1000():
+    PIN_IRQ = 19
+    PIN_SS = 16
+    DW1000.begin(PIN_IRQ)
+    DW1000.setup(PIN_SS)
+    DW1000.generalConfiguration("7D:00:22:EA:82:60:3B:0C", C.MODE_LONGDATA_FAST_ACCURACY)
+    DW1000.registerCallback("handleSent", handleSent)
+    DW1000.registerCallback("handleReceived", handleReceived)
+    DW1000.setAntennaDelay(C.ANTENNA_DELAY_RASPI)
+    receiver()
+
+def handleSent():
+    global sentFlag
+    sentFlag = True
+
+def handleReceived():
+    global receivedFlag
+    receivedFlag = True
+
 def controlSignalCB(signal):
     global sequence
     if signal.sender == MY_ADDRESS:
@@ -93,6 +112,7 @@ if __name__ == '__main__':
     MY_ADDRESS  = rospy.get_param("~id")
     print("Anchor Address: {}".format(MY_ADDRESS))
     init()
+    initDW1000()
     try:
         spin()
     except rospy.ROSInterruptException:
