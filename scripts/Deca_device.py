@@ -7,15 +7,15 @@ class DecaDevice:
         self.address                = address
         self.type                   = type_of_tag
         self.is_inactive            = False
-        self.sequenceNumber         = 0
-        if type_of_tag == DecaDevice.ANCHOR:
-            self.timePollReceived       = {}
-            self.timePollAckSent        = {}
-            self.timeRangeReceived      = {}
-        if type_of_tag == DecaDevice.TAG:
-            self.timePollSent           = {}
-            self.timePollAckReceived    = {}
-            self.timeRangeSent          = {}
+        # self.sequenceNumber         = 0
+        # if type_of_tag == DecaDevice.ANCHOR:
+            # self.timePollReceived       = {}
+            # self.timePollAckSent        = {}
+            # self.timeRangeReceived      = {}
+        # if type_of_tag == DecaDevice.TAG:
+        #     self.timePollSent           = {}
+        #     self.timePollAckReceived    = {}
+        #     self.timeRangeSent          = {}
         self.expectedMessage        = C.POLL_ACK if (self.type == DecaDevice.ANCHOR) else C.POLL
         
     def deletePreviousSequenceData(self):
