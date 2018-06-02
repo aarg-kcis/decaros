@@ -109,6 +109,7 @@ def checkFlags():
             deletePrevTimeStamps(sequence)
 
 def transmitPollAck(sequence):
+    global lastSignalServiced
     print "transmitting POLLACK"
     DW1000.newTransmit()
     DW1000.setData([C.POLL_ACK, MY_ADDRESS, sequence, NODE_TYPE], 4)

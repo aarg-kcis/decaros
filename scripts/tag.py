@@ -110,6 +110,7 @@ def checkFlags():
         timePollAckReceived[sequence] = DW1000.getReceiveTimestamp()
 
 def transmitPoll(sequence):
+    global lastSignalServiced
     print "Transmitting POLL"
     DW1000.newTransmit()
     DW1000.setData([C.POLL, MY_ADDRESS, sequence, NODE_TYPE], 4)
@@ -117,6 +118,7 @@ def transmitPoll(sequence):
     lastSignalServiced = SEND_POLL
 
 def transmitRange(address):
+    global lastSignalServiced
     print "Transmitting RANGE"
     DW1000.newTransmit()
     DW1000.setData([C.RANGE, MY_ADDRESS, sequence, NODE_TYPE], 4)
