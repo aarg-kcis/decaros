@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 
 import rospy
+import DW1000
 import DW1000Constants as C
 from Deca_device import DecaDevice
 from decaros.msg import ControlSignal
 from decaros.msg import ControlSignalReply
+from decaros.msg import AnchorTimeStamps
 
 SEND_POLL       = 1
 SEND_POLL_ACK   = 2
@@ -81,7 +83,7 @@ def checkFlags():
             return
         if msgType == C.POLL:
             timePollReceived[sequence] = DW1000.getReceiveTimestamp()
-        elif msgType == C.RANGE
+        elif msgType == C.RANGE:
             timeRangeReceived[sequence] = DW1000.getReceiveTimestamp()
             timestampPub.publish(getTimeStampForSequence(sequence))
             deletePrevTimeStamps(sequence)
