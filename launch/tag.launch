@@ -1,0 +1,5 @@
+<launch>
+   <node name="tag" pkg="decaros" type="tag.py" output="screen" >
+      <param name="id" value="69"/>
+   </node>
+</launch>
