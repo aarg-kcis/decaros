@@ -82,7 +82,7 @@ def deletePrevTimeStamps(seq):
     timeRangeSent       = {seq: timeRangeSent[seq]}
 
 def checkFlags():
-    global sequence
+    global sequence, sentFlag, receivedFlag
     if sentFlag:
         print "Sent message"
         sentFlag = False
