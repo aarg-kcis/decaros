@@ -14,7 +14,6 @@ TIMEOUT_TIME    = 1
 RATE            = 100
 
 def init():
-    global anchorList, tagList
     global controlPub, control, sequence
     global commandExecuted, expectedControlReply
     anchorList      = {}
@@ -29,12 +28,6 @@ def init():
 def controlSignalReplyCB(reply):
     commandExecuted = (reply == expectedControlReply)
 
-def populateDeviceLists(ANCHORS, TAGS):
-    for i in ANCHORS:
-        anchorList[i] = DecaDevice(i, DecaDevice.ANCHOR)
-    for i in TAGS:
-        tagList[i] = DecaDevice(i, DecaDevice.TAG)
-
 def registerExepectedReply(controlsignal):
     expectedControlReply.sender     = controlsignal.sender
     expectedControlReply.signal     = controlsignal.signal
@@ -44,7 +37,6 @@ def sendControlSignal(seq, signal, sender, receiver=BROADCAST):
     control.sequence    = seq
     control.signal      = signal
     control.sender      = sender
-    control.receiver    = receiver
     controlPub.publish(control)
     registerExepectedReply(control)
 
@@ -73,7 +65,7 @@ def spin():
     rospy.on_shutdown(shutdown)
     while not rospy.is_shutdown():
         startRanging();
-        sequence += 1
+        sequence = (sequence + 1) % 256
         rate.sleep()
     rospy.spin()
 
@@ -82,13 +74,12 @@ def shutdown():
     rospy.sleep(1)
 
 if __name__ == '__main__':
-    rospy.init_node('central_node', anonymous=True)
+    rospy.init_node('central_node')
     init()
-    ANCHORS     = map(int, rospy.get_param("~anchors").split(","))
-    TAGS        = map(int, rospy.get_param("~tags").split(','))
-    print("Anchors: {}".format(ANCHORS))
-    print("Tags: {}".format(TAGS))
-    populateDeviceLists(ANCHORS, TAGS)
+    anchorList  = map(int, rospy.get_param("~anchors").split(","))
+    tagList     = map(int, rospy.get_param("~tags").split(','))
+    print("Anchors: {}".format(anchorList))
+    print("Tags: {}".format(tagList))
     try:
         spin()
     except rospy.ROSInterruptException:
