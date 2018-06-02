@@ -3,9 +3,9 @@
 import rospy
 from DecaDevice import DecaDevice
 
-SEND_POLL 		= "SENDPOLL"
-SEND_POLL_ACK 	= "SENDPACK"
-SEND_RANGE 		= "RANGE"
+SEND_POLL 		= 1
+SEND_POLL_ACK 	= 2
+SEND_RANGE 		= 3
 BROADCAST 		= 0xFF
 TIMEOUT_TIME 	= 1
 
