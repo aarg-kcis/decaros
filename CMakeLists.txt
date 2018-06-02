@@ -51,6 +51,8 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
 	ControlSignal.msg
 	ControlSignalReply.msg
+  AnchorTimeStamps.msg
+  TagTimeStamps.msg
 )
 
 ## Generate services in the 'srv' folder
