@@ -68,7 +68,10 @@ def controlSignalCB(signal):
             transmitRange(signal.sequence)
 
 def getTimeStampForSequence(seq):
-    ts = AnchorTimeStamps()
+    ts = TagTimeStamps()
+    print timePollSent
+    print timePollAckReceived
+    print timeRangeSent
     ts.id                   = MY_ADDRESS
     ts.sequence             = seq
     ts.timePollSent         = timePollSent[seq]
@@ -82,8 +85,27 @@ def deletePrevTimeStamps(seq):
     timePollAckReceived = {seq: timePollAckReceived[seq]}
     timeRangeSent       = {seq: timeRangeSent[seq]}
 
+def transmitPoll(sequence):
+    global lastSignalServiced
+    print "Transmitting POLL"
+    print "Data: ", [C.POLL, MY_ADDRESS, sequence, NODE_TYPE]
+    DW1000.newTransmit()
+    DW1000.setData([C.POLL, MY_ADDRESS, sequence, NODE_TYPE], 4)
+    DW1000.startTransmit()
+    lastSignalServiced = SEND_POLL
+
+def transmitRange(address):
+    global lastSignalServiced
+    print "Transmitting RANGE"
+    print "Data: ", [C.RANGE, MY_ADDRESS, sequence, NODE_TYPE]
+    DW1000.newTransmit()
+    DW1000.setData([C.RANGE, MY_ADDRESS, sequence, NODE_TYPE], 4)
+    DW1000.startTransmit()
+    lastSignalServiced = SEND_RANGE
+
 def checkFlags():
     global sequence, sentFlag, receivedFlag
+    global timePollSent, timePollAckReceived, timeRangeSent
     if sentFlag:
         print "Sent message"
         sentFlag = False
@@ -95,10 +117,10 @@ def checkFlags():
             timePollSent[sequence]  = DW1000.getTransmitTimestamp()
             print "Poll sent for {} with timestamp {}".format(sequence, timePollSent[sequence])
         elif lastSignalServiced == SEND_RANGE:
-            print "Range sent for {}".format(sequence)
             timeRangeSent[sequence] = DW1000.getTransmitTimestamp()
+            print "Range sent for {} with timestamp {}".format(sequence, timeRangeSent[sequence])
             timestampPub.publish(getTimeStampForSequence(sequence))
-            # deletePrevTimeStamps(sequence)
+            deletePrevTimeStamps(sequence)
         replyPub.publish(reply)
     elif receivedFlag:
         print "Received message"
@@ -106,33 +128,15 @@ def checkFlags():
         msgType, sender, sequence, node_type = DW1000.getData(4)
         if node_type == NODE_TYPE and msgType == C.POLL_ACK:
             return
-        print "Poll Ack received for {}".format(sequence)
         timePollAckReceived[sequence] = DW1000.getReceiveTimestamp()
-
-def transmitPoll(sequence):
-    global lastSignalServiced
-    print "Transmitting POLL"
-    DW1000.newTransmit()
-    DW1000.setData([C.POLL, MY_ADDRESS, sequence, NODE_TYPE], 4)
-    DW1000.startTransmit()
-    lastSignalServiced = SEND_POLL
-
-def transmitRange(address):
-    global lastSignalServiced
-    print "Transmitting RANGE"
-    DW1000.newTransmit()
-    DW1000.setData([C.RANGE, MY_ADDRESS, sequence, NODE_TYPE], 4)
-    DW1000.startTransmit()
-    lastSignalServiced = SEND_RANGE
+        print "Poll Ack received for {} with timestamp {}".format(sequence, timePollAckReceived[sequence])
 
 def spin():
-    global sequence
     rospy.loginfo("Finding Global Positions")
     rate = rospy.Rate(RATE)
     rospy.on_shutdown(shutdown)
     while not rospy.is_shutdown():
         checkFlags();
-        sequence += 1
         rate.sleep()
     rospy.spin()
 
