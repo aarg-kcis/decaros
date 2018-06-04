@@ -6,55 +6,71 @@ import DW1000Constants as C
 from Deca_device import DecaDevice
 from decaros.msg import AnchorTimeStamps
 from decaros.msg import TagTimeStamps
+import time
 
 Tag_seq 		= 0
 Anchor_seq 		= 0
 RATE            = 100
+anchor_timemsg     = {}
+tag_timemsg        = {}
+round1=0
+round1=0
+reply1=0
+reply2=0
+current_sequence = 1
+current_Tag_sequence = 0
+current_Anchor_sequence = 0
 
 def init():
-    global sequence
+    global sequence,current_sequence
     global timePollReceived, timePollAckSent, timeRangeReceived,timePollSent,timePollAckReceived,timeRangeSent
-    anchor_time_msg     = {}
-    tag_time_msg        = {}
     current_sequence    = 0
-    rospy.Subscriber('Tag_TimeStamps', TagTimeStamps, TagTimeStampsCB)
-    rospy.Subscriber('Anchor_TimeStamps',AnchorTimeStamps, AnchorTimeStampsCB)
+    rospy.Subscriber('tag_timestamps', TagTimeStamps, TagTimeStampsCB)
+    rospy.Subscriber('anchor_timestamps', AnchorTimeStamps, AnchorTimeStampsCB)
 
 def TagTimeStampsCB(Time_msg):
-	global tag_time_msg
-	tag_time_msg[Time_msg.sequence] = Time_msg
-	print Time_msg
+    global tag_timemsg, current_Tag_sequence
+    tag_timemsg[Time_msg.sequence] = Time_msg
+    current_Tag_sequence = Time_msg.sequence
+    # print tag_timemsg
 
-def AnchorTimeStampCB(Time_msg):
-	global anchor_time_msg
-	anchor_time_msg[Time_msg.sequence] = Time_msg
-	print Time_msg
+def AnchorTimeStampsCB(Time_msg):
+    global anchor_timemsg, current_Anchor_sequence
+    anchor_timemsg[Time_msg.sequence]= Time_msg
+    current_Anchor_sequence = Time_msg.sequence
+    # print anchor_timemsg
 
-def deletePreviousSequenceData():
-    for i in tag_time_msg:
-        for j in i.keys():
-            if j != tag_time_msg.sequence-1:
-                del i[j]
-
-   	for i in anchor_time_msg:
-   		for j in i.keys():
-   			if j != anchor_time_msg.sequence - 1 :
-   				del i[j]
 
 
 def getrange():
-	global current_sequence
-	if tag_time_msg.sequence == anchor_time_msg.sequence :
-		current_sequence = tag_time_msg.sequence
-		round1 = DW1000.wrapTimestamp(tag_time_msg[current_sequence].timePollAckReceived - tag_time_msg[current_sequence].timePollSent)
-        reply1 = DW1000.wrapTimestamp(anchor_time_msg[current_sequence].timePollAckSent - anchor_time_msg[current_sequence].timePollReceived)
-        round2 = DW1000.wrapTimestamp(anchor_time_msg[current_sequence].timeRangeReceived - anchor_time_msg[current_sequence].timePollAckSent)
-        reply2 = DW1000.wrapTimestamp(tag_time_msg[current_sequence].timeRangeSent - tag_time_msg[current_sequence].timePollAckReceived)
+    global current_sequence,tag_timemsg,anchor_timemsg,round1,round2,reply1,reply2
+    # print "A :" , anchor_timemsg
+    # print "T :" , tag_timemsg
+    # else:
+    #     current_sequence = min(current_Anchor_sequence,current_Tag_sequence)
+    #     if current_sequence == 0 and 
+
+    if current_Tag_sequence == current_Anchor_sequence :
+        current_sequence = current_Anchor_sequence
+
+    else : 
+        current_sequence = min(current_Anchor_sequence,current_Tag_sequence)
+
+    if current_sequence!=0 :
+        round1 = (tag_timemsg[current_sequence].timePollAckReceived - tag_timemsg[current_sequence].timePollSent)
+        reply1 = (anchor_timemsg[current_sequence].timePollAckSent - anchor_timemsg[current_sequence].timePollReceived)
+        round2 = (anchor_timemsg[current_sequence].timeRangeReceived - anchor_timemsg[current_sequence].timePollAckSent)
+        reply2 = (tag_timemsg[current_sequence].timeRangeSent - tag_timemsg[current_sequence].timePollAckReceived)
+        # time.sleep(5)
         print "round1: {}\t\t reply1:{}".format(round1, reply1)
         print "round2: {}\t\t reply2:{}".format(round2, reply2)
-        deletePreviousSequenceData()
+        # deletePreviousSequenceData()
+        # if round1==0 and round2==0 and reply1==0 and reply2==0 :
+        #     return 0
         range1 = (round1 * round2 - reply1 * reply2) / (round1 + round2 + reply1 + reply2)
-        return (range1 % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO
+        print ((range1 % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO)
+
+
 
 
 def spin():
@@ -62,7 +78,7 @@ def spin():
     rate = rospy.Rate(RATE)
     rospy.on_shutdown(shutdown)
     while not rospy.is_shutdown():
-        print getrange()
+        getrange()
         rate.sleep()
     rospy.spin()
 
@@ -71,6 +87,7 @@ def shutdown():
     rospy.sleep(1)
 
 if __name__ == '__main__':
+    init()
     rospy.init_node("range", anonymous=True)
     try:
         spin()

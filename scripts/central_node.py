@@ -27,6 +27,7 @@ def init():
 
 def controlSignalReplyCB(reply):
     commandExecuted = (reply == expectedControlReply)
+    print "Reply obtained"
 
 def registerExepectedReply(controlsignal):
     expectedControlReply.sender     = controlsignal.sender
@@ -38,6 +39,7 @@ def sendControlSignal(seq, signal, sender, receiver=BROADCAST):
     control.signal      = signal
     control.sender      = sender
     controlPub.publish(control)
+    # print "Published controlsignal"
     registerExepectedReply(control)
 
 def wait(sentTime):
