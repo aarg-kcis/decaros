@@ -17,9 +17,10 @@ round1=0
 round1=0
 reply1=0
 reply2=0
-current_sequence = 1
+current_sequence = 0
 current_Tag_sequence = 0
 current_Anchor_sequence = 0
+calc_done_flag = [0]*256
 
 def init():
     global sequence,current_sequence
@@ -43,7 +44,7 @@ def AnchorTimeStampsCB(Time_msg):
 
 
 def getrange():
-    global current_sequence,tag_timemsg,anchor_timemsg,round1,round2,reply1,reply2
+    global current_sequence,tag_timemsg,anchor_timemsg,round1,round2,reply1,reply2,calc_done_flag
     # print "A :" , anchor_timemsg
     # print "T :" , tag_timemsg
     # else:
@@ -56,11 +57,11 @@ def getrange():
     else : 
         current_sequence = min(current_Anchor_sequence,current_Tag_sequence)
 
-    if current_sequence!=0 :
-        round1 = (tag_timemsg[current_sequence].timePollAckReceived - tag_timemsg[current_sequence].timePollSent)
-        reply1 = (anchor_timemsg[current_sequence].timePollAckSent - anchor_timemsg[current_sequence].timePollReceived)
-        round2 = (anchor_timemsg[current_sequence].timeRangeReceived - anchor_timemsg[current_sequence].timePollAckSent)
-        reply2 = (tag_timemsg[current_sequence].timeRangeSent - tag_timemsg[current_sequence].timePollAckReceived)
+    if len(tag_timemsg)!=0 and len(anchor_timemsg)!=0 and calc_done_flag[current_sequence]==0 and current_sequence in anchor_timemsg.keys() and current_sequence in tag_timemsg.keys():
+        round1 = DW1000.wrapTimestamp(tag_timemsg[current_sequence].timePollAckReceived - tag_timemsg[current_sequence].timePollSent)
+        reply1 = DW1000.wrapTimestamp(anchor_timemsg[current_sequence].timePollAckSent - anchor_timemsg[current_sequence].timePollReceived)
+        round2 = DW1000.wrapTimestamp(anchor_timemsg[current_sequence].timeRangeReceived - anchor_timemsg[current_sequence].timePollAckSent)
+        reply2 = DW1000.wrapTimestamp(tag_timemsg[current_sequence].timeRangeSent - tag_timemsg[current_sequence].timePollAckReceived)
         # time.sleep(5)
         print "round1: {}\t\t reply1:{}".format(round1, reply1)
         print "round2: {}\t\t reply2:{}".format(round2, reply2)
@@ -69,6 +70,10 @@ def getrange():
         #     return 0
         range1 = (round1 * round2 - reply1 * reply2) / (round1 + round2 + reply1 + reply2)
         print ((range1 % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO)
+        calc_done_flag[current_sequence] = 1
+
+        if current_sequence == 255 : 
+            calc_done_flag = [0]*256
 
 
 
