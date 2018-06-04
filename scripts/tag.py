@@ -91,20 +91,20 @@ def checkFlags():
         reply.sequence  = sequence
         reply.signal    = lastSignalServiced
         print "last signal serviced is {}".format(lastSignalServiced)
-        if  lastSignalServiced == SEND_RANGE:
-            print "Poll sent for {}".format(sequence)
+        if  lastSignalServiced == SEND_POLL:
             timePollSent[sequence]  = DW1000.getTransmitTimestamp()
-        elif lastSignalServiced == SEND_POLL and sequence in timePollAckReceived.keys():
+            print "Poll sent for {} with timestamp {}".format(sequence, timePollSent[sequence])
+        elif lastSignalServiced == SEND_RANGE:
             print "Range sent for {}".format(sequence)
             timeRangeSent[sequence] = DW1000.getTransmitTimestamp()
             timestampPub.publish(getTimeStampForSequence(sequence))
-            deletePrevTimeStamps(sequence)
+            # deletePrevTimeStamps(sequence)
         replyPub.publish(reply)
     elif receivedFlag:
         print "Received message"
         receivedFlag = False
         msgType, sender, sequence, node_type = DW1000.getData(4)
-        if node_type == NODE_TYPE:
+        if node_type == NODE_TYPE and msgType == C.POLL_ACK:
             return
         print "Poll Ack received for {}".format(sequence)
         timePollAckReceived[sequence] = DW1000.getReceiveTimestamp()

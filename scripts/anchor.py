@@ -89,9 +89,9 @@ def checkFlags():
         reply.sender    = MY_ADDRESS
         reply.sequence  = sequence
         reply.signal    = lastSignalServiced
-        if  lastSignalServiced == SEND_POLL:
+        if  lastSignalServiced == SEND_POLL_ACK:
             timePollAckSent[sequence]  = DW1000.getTransmitTimestamp()
-            print "Poll Ack sent for {}".format(sequence)
+            print "Poll Ack sent for {} with timestamp {}".format(sequence, timePollAckSent[sequence])
             replyPub.publish(reply)
     elif receivedFlag:
         receivedFlag = False
@@ -100,13 +100,13 @@ def checkFlags():
         if node_type == NODE_TYPE:
             return
         if msgType == C.POLL:
-            print "Poll received for {}".format(sequence)
+            print "Poll received for {} with timestamp {}".format(sequence, timePollReceived[sequence])
             timePollReceived[sequence] = DW1000.getReceiveTimestamp()
         elif msgType == C.RANGE:
-            print "Range received for {}".format(sequence)
+            print "Range received for {} with timestamp {}".format(sequence, timeRangeReceived[sequence])
             timeRangeReceived[sequence] = DW1000.getReceiveTimestamp()
             timestampPub.publish(getTimeStampForSequence(sequence))
-            deletePrevTimeStamps(sequence)
+            # deletePrevTimeStamps(sequence)
 
 def transmitPollAck(sequence):
     global lastSignalServiced
@@ -114,7 +114,7 @@ def transmitPollAck(sequence):
     DW1000.newTransmit()
     DW1000.setData([C.POLL_ACK, MY_ADDRESS, sequence, NODE_TYPE], 4)
     DW1000.startTransmit()
-    lastSignalServiced = SEND_POLL
+    lastSignalServiced = SEND_POLL_ACK
 
 def spin():
     global sequence
