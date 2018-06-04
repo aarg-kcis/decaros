@@ -1,6 +1,6 @@
 <launch>
    <node name="central_server" pkg="decaros" type="central_node.py" output="screen" >
       <param name="anchors" type="string" value="64"/>
-      <param name="tags" type="string" value="66"/>
+      <param name="tags" type="string" value="69"/>
    </node>
 </launch>

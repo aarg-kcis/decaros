@@ -18,7 +18,7 @@ def init():
     global commandExecuted, expectedControlReply
     anchorList      = {}
     tagList         = {}
-    controlPub      = rospy.Publisher('control_signal', ControlSignal, queue_size=10)
+    controlPub      = rospy.Publisher('control_signal', ControlSignal, queue_size=1)
     control         = ControlSignal()
     sequence        = 1
     commandExecuted = False

@@ -24,8 +24,8 @@ def init():
     timePollReceived       = {}
     timePollAckSent        = {}
     timeRangeReceived      = {}
-    replyPub            = rospy.Publisher('control_reply', ControlSignalReply, queue_size=10)
-    timestampPub        = rospy.Publisher('anchor_timestamps', AnchorTimeStamps, queue_size=10)
+    replyPub            = rospy.Publisher('control_reply', ControlSignalReply, queue_size=1)
+    timestampPub        = rospy.Publisher('anchor_timestamps', AnchorTimeStamps, queue_size=1)
     reply               = ControlSignalReply()
     sequence            = 0
     lastSignalServiced  = SEND_POLL
