@@ -44,8 +44,6 @@ def initDW1000():
 
 def handleSent():
     global sentFlag, reply
-    # sentFlag = True
-    # sentFlag = False
     reply.sender    = MY_ADDRESS
     reply.sequence  = sequence
     reply.signal    = lastSignalServiced
@@ -67,7 +65,7 @@ def handleReceived():
     elif msgType == C.RANGE \
         and sender in timePollReceived.keys() \
         and sequence in timePollReceived[sender].keys() \
-        and sequence in timePollAckSent[sender].keys():
+        and sequence in timePollAckSent.keys():
         timeRangeReceived[sender] = {sequence : DW1000.getReceiveTimestamp()}
         print "Range received from {} for seq {} with timestamp {}"\
                 .format(sender, sequence, timeRangeReceived[sender][sequence])

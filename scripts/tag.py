@@ -43,11 +43,6 @@ def initDW1000():
     receiver()
 
 def handleSent():
-    global sentFlag, reply
-    print "Sent message"
-    reply.sender    = MY_ADDRESS
-    reply.sequence  = sequence
-    reply.signal    = lastSignalServiced
     print "last signal serviced is {}".format(lastSignalServiced)
     if  lastSignalServiced == SEND_POLL:
         timePollSent[sequence]  = DW1000.getTransmitTimestamp()
@@ -55,14 +50,11 @@ def handleSent():
     elif lastSignalServiced == SEND_RANGE:
         timeRangeSent[sequence] = DW1000.getTransmitTimestamp()
         print "Range sent for {} with timestamp {}".format(sequence, timeRangeSent[sequence])
-        currentAnchors = [i for i in timePollAckReceived if timePollAckReceived[i][sequence] == sequence]
+        currentAnchors = [i for i, j in timePollAckReceived.items() if sequence in j]
         for i in currentAnchors:
             timestampPub.publish(getTimeStampForSequence(sequence, i))
-        # deletePrevTimeStamps(sequence, sender)
-    replyPub.publish(reply)
 
 def handleReceived():
-    global receivedFlag, reply
     print "Received message"
     msgType, sender, sequence, node_type = DW1000.getData(4)
     if node_type == NODE_TYPE and msgType == C.POLL_ACK:
@@ -94,8 +86,9 @@ def getTimeStampForSequence(seq, anchor):
     ts.sequence             = seq
     ts.anchor               = anchor
     ts.timePollSent         = timePollSent[seq]
-    ts.timePollAckReceived  = timePollAckReceived[seq]
+    ts.timePollAckReceived  = timePollAckReceived[anchor][seq]
     ts.timeRangeSent        = timeRangeSent[seq]
+    print ts
     return ts
 
 def deletePrevTimeStamps(seq, sender):
