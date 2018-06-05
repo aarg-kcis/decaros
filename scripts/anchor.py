@@ -17,6 +17,7 @@ RATE            = 100
 NODE_TYPE       = 1 # ANCHOR
 sentFlag        = False
 receivedFlag    = False
+REPLY_DELAY_TIME_US = 7000
 
 def init():
     global replyPub, reply, sequence, lastSignalServiced, timestampPub
