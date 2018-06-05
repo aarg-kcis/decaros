@@ -48,6 +48,7 @@ def handleSent():
     if  lastSignalServiced == SEND_POLL:
         timePollSent[sequence]  = DW1000.getTransmitTimestamp()
         print "Poll sent for {} with timestamp {}".format(sequence, timePollSent[sequence])
+        replyPub.publish(reply)
     elif lastSignalServiced == SEND_RANGE:
         timeRangeSent[sequence] = DW1000.getTransmitTimestamp()
         print "Range sent for {} with timestamp {}".format(sequence, timeRangeSent[sequence])
@@ -57,6 +58,7 @@ def handleSent():
         print "TIME RANGE SENT", timeRangeSent
         for i in currentAnchors:
             timestampPub.publish(getTimeStampForSequence(sequence, i))
+        replyPub.publish(reply)
 
 def handleReceived():
     global timePollAckReceived
@@ -75,11 +77,12 @@ def receiver():
     DW1000.startReceive()
 
 def controlSignalCB(signal):
-    global sequence
+    global sequence, reply
     print "Received signal"
     print signal
     if signal.sender == MY_ADDRESS:
         sequence = signal.sequence
+        reply = signal
         if signal.signal == SEND_POLL:
             transmitPoll(signal.sequence)
         elif signal.signal == SEND_RANGE:
