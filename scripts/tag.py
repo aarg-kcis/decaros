@@ -68,6 +68,7 @@ def handleSent():
         timeRangeSent[sequence] = DW1000.getTransmitTimestamp()
         print "Range sent for {} with timestamp {}".format(sequence, timeRangeSent[sequence])
         currentAnchors = [i for i, j in timePollAckReceived.items() if sequence in j]
+        print "currentAnchors :", currentAnchors
         print "TIME POLL SENT", timePollSent[sequence]
         print "TIME POLL ACK RECEIVED", timePollAckReceived[sequence]
         print "TIME RANGE SENT", timeRangeSent[sequence]
