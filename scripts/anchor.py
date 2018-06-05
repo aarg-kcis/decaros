@@ -112,6 +112,7 @@ def transmitPollAck(sequence):
     print "Transmitting POLLACK"
     print "Data: ", [C.POLL_ACK, MY_ADDRESS, sequence, NODE_TYPE]
     DW1000.newTransmit()
+    DW1000.setDelay(REPLY_DELAY_TIME_US, C.MICROSECONDS)
     DW1000.setData([C.POLL_ACK, MY_ADDRESS, sequence, NODE_TYPE], 4)
     DW1000.startTransmit()
     lastSignalServiced = SEND_POLL_ACK
