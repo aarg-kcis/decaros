@@ -47,7 +47,7 @@ def getrange():
 
     for i in tagList :
         for j in anchorList :
-        	if tag_timemsg[i]!={} and anchor_timemsg[i]!={} : 
+        	if tag_timemsg[i][j]!=0 and anchor_timemsg[i][j]!=0 : 
 	            if tag_timemsg[i][j].sequence==anchor_timemsg[i][j].sequence :
 	                current_sequence = tag_timemsg[i][j].sequence
 
