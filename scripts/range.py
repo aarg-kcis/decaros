@@ -64,9 +64,9 @@ def getrange():
 	                    
 	                    range1 = ((round1 * round2 - reply1 * reply2) / (round1 + round2 + reply1 + reply2))
 	                    print current_sequence
-	                    # print range1
+	                    print range1
 	                    print "Range between {} and {}".format(i,j)
-	                    print ((range1 % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO)
+	                    print ((abs(range1) % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO)
 	                    print "------"
 	                    sequence_over[i][j] = current_sequence
                     
