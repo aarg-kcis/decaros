@@ -122,6 +122,7 @@ def checkFlags():
 
 def spin():
     rospy.loginfo("Finding Global Positions")
+    global sequence
     rate = rospy.Rate(RATE)
     rospy.on_shutdown(shutdown)
     while not rospy.is_shutdown():

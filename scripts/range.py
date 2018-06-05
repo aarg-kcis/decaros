@@ -26,8 +26,8 @@ def init():
     global sequence,current_sequence
     global timePollReceived, timePollAckSent, timeRangeReceived,timePollSent,timePollAckReceived,timeRangeSent
     current_sequence    = 0
-    rospy.Subscriber('tag_timestamps', TagTimeStamps, TagTimeStampsCB)
-    rospy.Subscriber('anchor_timestamps', AnchorTimeStamps, AnchorTimeStampsCB)
+    rospy.Subscriber('tag_timestamps', TagTimeStamps, TagTimeStampsCB,  queue_size=1)
+    rospy.Subscriber('anchor_timestamps', AnchorTimeStamps, AnchorTimeStampsCB, queue_size=1)
 
 def TagTimeStampsCB(Time_msg):
     global tag_timemsg, current_Tag_sequence
@@ -68,8 +68,11 @@ def getrange():
         # deletePreviousSequenceData()
         # if round1==0 and round2==0 and reply1==0 and reply2==0 :
         #     return 0
-        range1 = (round1 * round2 - reply1 * reply2) / (round1 + round2 + reply1 + reply2)
-        print ((range1 % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO)
+        range1 = ((round1 * round2 - reply1 * reply2) / (round1 + round2 + reply1 + reply2))
+        print current_sequence
+        print range1
+        print ((abs(range1) % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO)
+        print "------"
         calc_done_flag[current_sequence] = 1
 
         if current_sequence == 255 : 
