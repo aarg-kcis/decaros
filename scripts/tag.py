@@ -42,6 +42,21 @@ def initDW1000():
     DW1000.setAntennaDelay(C.ANTENNA_DELAY_RASPI)
     receiver()
 
+def getTimeStampForSequence(seq,anchor_id):
+
+
+    ts = TagTimeStamps()
+    ts.id                   = MY_ADDRESS
+    ts.anchor               = anchor_id
+    ts.sequence             = seq
+    ts.anchor               = anchor
+    ts.timePollSent         = timePollSent[seq]
+    ts.timePollAckReceived  = timePollAckReceived[anchor][seq]
+    ts.timeRangeSent        = timeRangeSent[seq]
+    print "returning"
+    print ts
+    return ts
+
 def handleSent():
     global timeRangeSent, timePollSent
     print "last signal serviced is {}".format(lastSignalServiced)
@@ -53,9 +68,9 @@ def handleSent():
         timeRangeSent[sequence] = DW1000.getTransmitTimestamp()
         print "Range sent for {} with timestamp {}".format(sequence, timeRangeSent[sequence])
         currentAnchors = [i for i, j in timePollAckReceived.items() if sequence in j]
-        print "TIME POLL SENT", timePollSent
-        print "TIME POLL ACK RECEIVED", timePollAckReceived
-        print "TIME RANGE SENT", timeRangeSent
+        print "TIME POLL SENT", timePollSent[sequence]
+        print "TIME POLL ACK RECEIVED", timePollAckReceived[sequence]
+        print "TIME RANGE SENT", timeRangeSent[sequence]
         for i in currentAnchors:
             timestampPub.publish(getTimeStampForSequence(sequence, i))
         replyPub.publish(reply)
@@ -88,20 +103,6 @@ def controlSignalCB(signal):
         elif signal.signal == SEND_RANGE:
             transmitRange(signal.sequence)
 
-
-def getTimeStampForSequence(seq,anchor_id):
-
-
-    ts = TagTimeStamps()
-    ts.id                   = MY_ADDRESS
-    ts.anchor               = anchor_id
-    ts.sequence             = seq
-    ts.anchor               = anchor
-    ts.timePollSent         = timePollSent[seq]
-    ts.timePollAckReceived  = timePollAckReceived[anchor][seq]
-    ts.timeRangeSent        = timeRangeSent[seq]
-    print ts
-    return ts
 
 def deletePrevTimeStamps(seq, sender):
     global timePollSent, timePollAckReceived, timeRangeSent
