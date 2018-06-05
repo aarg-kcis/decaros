@@ -58,6 +58,7 @@ def handleSent():
         print "TIME RANGE SENT", timeRangeSent
         for i in currentAnchors:
             timestampPub.publish(getTimeStampForSequence(sequence, i))
+        deletePrevTimeStamps()
         replyPub.publish(reply)
 
 def handleReceived():
@@ -99,9 +100,11 @@ def getTimeStampForSequence(seq, anchor):
     print ts
     return ts
 
-def deletePrevTimeStamps(seq, sender):
+def deletePrevTimeStamps():
     global timePollSent, timePollAckReceived, timeRangeSent
-    del timePollAckReceived[sender]
+    timePollSent        = {}
+    timePollAckReceived = {}
+    timeRangeSent       = {}
 
 def transmitPoll(sequence):
     global lastSignalServiced
