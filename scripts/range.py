@@ -84,8 +84,8 @@ def shutdown():
 if __name__ == '__main__':
     global anchorList,tagList,sequence_over
     init()
-    anchorList  = map(int, rospy.get_param("anchors").split(","))
-    tagList     = map(int, rospy.get_param("tags").split(','))
+    anchorList  = map(int, rospy.get_param("~anchors").split(","))
+    tagList     = map(int, rospy.get_param("~tags").split(','))
     print("Anchors: {}".format(anchorList))
     print("Tags: {}".format(tagList))
     for i in tagList : 
