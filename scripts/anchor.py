@@ -70,6 +70,10 @@ def handleReceived():
         print "Range received from {} for seq {} with timestamp {}"\
                 .format(sender, sequence, timeRangeReceived[sender][sequence])
         timestampPub.publish(getTimeStampForSequence(sequence, sender))
+    else:
+        print "TIME POLL RECEIVED", timePollReceived
+        print "TIME POLL ACK SENT", timePollAckSent
+        print "TIME RANGE RECEIVED", timeRangeReceived
         # deletePrevTimeStamps(sequence, sender)
 
 def receiver():
