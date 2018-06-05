@@ -55,10 +55,10 @@ def handleSent():
     elif lastSignalServiced == SEND_RANGE:
         timeRangeSent[sequence] = DW1000.getTransmitTimestamp()
         print "Range sent for {} with timestamp {}".format(sequence, timeRangeSent[sequence])
-        currentAnchors = [i for i in timePollAckReceived if i[sequence] == sequence]
+        currentAnchors = [i for i in timePollAckReceived if timePollAckReceived[i][sequence] == sequence]
         for i in currentAnchors:
             timestampPub.publish(getTimeStampForSequence(sequence, i))
-        deletePrevTimeStamps(sequence, sender)
+        # deletePrevTimeStamps(sequence, sender)
     replyPub.publish(reply)
 
 def handleReceived():
