@@ -43,7 +43,7 @@ def initDW1000():
     receiver()
 
 def handleSent():
-    global sentFlag, reply
+    global timePollAckSent
     reply.sender    = MY_ADDRESS
     reply.sequence  = sequence
     reply.signal    = lastSignalServiced
@@ -53,7 +53,7 @@ def handleSent():
         replyPub.publish(reply)
 
 def handleReceived():
-    global receivedFlag, reply
+    global timePollReceived, timeRangeReceived
     msgType, sender, sequence, node_type = DW1000.getData(4)
     print "Received Data: ", [msgType, sender, sequence, node_type]
     if node_type == NODE_TYPE:

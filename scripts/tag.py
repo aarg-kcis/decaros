@@ -43,6 +43,7 @@ def initDW1000():
     receiver()
 
 def handleSent():
+    global timeRangeSent, timePollSent
     print "last signal serviced is {}".format(lastSignalServiced)
     if  lastSignalServiced == SEND_POLL:
         timePollSent[sequence]  = DW1000.getTransmitTimestamp()
@@ -58,6 +59,7 @@ def handleSent():
             timestampPub.publish(getTimeStampForSequence(sequence, i))
 
 def handleReceived():
+    global timePollAckReceived
     print "Received message"
     msgType, sender, sequence, node_type = DW1000.getData(4)
     if node_type == NODE_TYPE and msgType == C.POLL_ACK:
