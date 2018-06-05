@@ -56,20 +56,22 @@ def handleSent():
 
 def handleReceived():
     global receivedFlag, reply
-    # receivedFlag = False
-    # receivedFlag = True
     msgType, sender, sequence, node_type = DW1000.getData(4)
     print "Received Data: ", [msgType, sender, sequence, node_type]
     if node_type == NODE_TYPE:
         return
     if msgType == C.POLL:
-        timePollReceived[sequence] = DW1000.getReceiveTimestamp()
-        print "Poll received for {} with timestamp {}".format(sequence, timePollReceived[sequence])
-    elif msgType == C.RANGE:
-        timeRangeReceived[sequence] = DW1000.getReceiveTimestamp()
-        print "Range received for {} with timestamp {}".format(sequence, timeRangeReceived[sequence])
-        timestampPub.publish(getTimeStampForSequence(sequence))
-        deletePrevTimeStamps(sequence)
+        timePollReceived[sender] = {sequence : DW1000.getReceiveTimestamp()}
+        print "Poll received from {} for seq {} with timestamp {}"\
+                .format(sender, sequence, timePollReceived[sender][sequence])
+    elif msgType == C.RANGE \
+        and sequence in timePollReceived[sender].keys() \
+        and sequence in timePollAckSent[sender].keys():
+        timeRangeReceived[sender] = {sequence : DW1000.getReceiveTimestamp()}
+        print "Range received from {} for seq {} with timestamp {}"\
+                .format(sender, sequence, timeRangeReceived[sender][sequence])
+        timestampPub.publish(getTimeStampForSequence(sequence, sender))
+        deletePrevTimeStamps(sequence, sender)
 
 def receiver():
     print "Initializing receiver"
@@ -82,27 +84,24 @@ def controlSignalCB(signal):
     print signal
     global sequence
     if signal.sender == MY_ADDRESS:
-        if signal.signal == SEND_POLL_ACK and signal.sequence in timePollReceived.keys():
+        if signal.signal == SEND_POLL_ACK:
             sequence = signal.sequence
             transmitPollAck(sequence)
 
-def getTimeStampForSequence(seq):
+def getTimeStampForSequence(seq, sender):
     ts = AnchorTimeStamps()
-    print timePollReceived
-    print timePollAckSent
-    print timeRangeReceived
     ts.id                   = MY_ADDRESS
+    ts.tag                  = sender
     ts.sequence             = seq
-    ts.timePollReceived     = timePollReceived[seq]
+    ts.timePollReceived     = timePollReceived[sender][seq]
     ts.timePollAckSent      = timePollAckSent[seq]
-    ts.timeRangeReceived    = timeRangeReceived[seq]
+    ts.timeRangeReceived    = timeRangeReceived[sender][seq]
     return ts
 
-def deletePrevTimeStamps(seq):
+def deletePrevTimeStamps(seq, sender):
     global timePollReceived, timePollAckSent, timeRangeReceived
-    timePollReceived    = {seq: timePollReceived[seq]}
-    timePollAckSent     = {seq: timePollAckSent[seq]}
-    timeRangeReceived   = {seq: timeRangeReceived[seq]}
+    del timePollReceived[sender]
+    del timeRangeReceived[sender]
 
 def transmitPollAck(sequence):
     global lastSignalServiced
