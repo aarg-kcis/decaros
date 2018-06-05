@@ -28,12 +28,12 @@ def init():
 
 def TagTimeStampsCB(Time_msg):
     global tag_timemsg
-    tag_timemsg[Time_msg.id][Time_msg.anchor_id] = Time_msg
+    tag_timemsg[Time_msg.id][Time_msg.anchor] = Time_msg
     
 
 def AnchorTimeStampsCB(Time_msg):
     global anchor_timemsg
-    anchor_timemsg[Time_msg.tag_id][Time_msg.id]= Time_msg
+    anchor_timemsg[Time_msg.tag][Time_msg.id]= Time_msg
 
 
 
@@ -84,8 +84,8 @@ def shutdown():
 if __name__ == '__main__':
     global anchorList,tagList,sequence_over
     init()
-    anchorList  = map(int, rospy.get_param("~anchors").split(","))
-    tagList     = map(int, rospy.get_param("~tags").split(','))
+    anchorList  = map(int, rospy.get_param("anchors").split(","))
+    tagList     = map(int, rospy.get_param("tags").split(','))
     print("Anchors: {}".format(anchorList))
     print("Tags: {}".format(tagList))
     for i in tagList : 

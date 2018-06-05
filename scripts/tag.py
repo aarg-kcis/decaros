@@ -94,7 +94,7 @@ def getTimeStampForSequence(seq,anchor_id):
 
     ts = TagTimeStamps()
     ts.id                   = MY_ADDRESS
-    ts.anchor_id            = anchor_id
+    ts.anchor               = anchor_id
     ts.sequence             = seq
     ts.anchor               = anchor
     ts.timePollSent         = timePollSent[seq]
