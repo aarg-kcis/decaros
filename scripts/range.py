@@ -10,7 +10,7 @@ import time
 
 Tag_seq 		= 0
 Anchor_seq 		= 0
-RATE            = 100
+RATE            = 1000
 round1=0
 round1=0
 reply1=0
