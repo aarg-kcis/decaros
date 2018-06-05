@@ -85,9 +85,10 @@ def receiver():
 def controlSignalCB(signal):
     print "Received signal"
     print signal
-    global sequence
+    global sequence, reply
     if signal.sender == MY_ADDRESS:
         if signal.signal == SEND_POLL_ACK:
+            reply = signal
             sequence = signal.sequence
             transmitPollAck(sequence)
 
