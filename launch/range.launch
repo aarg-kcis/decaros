@@ -1,5 +1,5 @@
 <launch>
-   <node name="central_server" pkg="decaros" type="central_node.py" output="screen" >
+   <node name="range" pkg="decaros" type="range.py" output="screen" >
       <param name="anchors" type="string" value="64"/>
       <param name="tags" type="string" value="69"/>
    </node>

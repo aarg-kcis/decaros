@@ -67,12 +67,13 @@ def controlSignalCB(signal):
         elif signal.signal == SEND_RANGE and signal.sequence in timePollAckReceived.keys():
             transmitRange(signal.sequence)
 
-def getTimeStampForSequence(seq):
+def getTimeStampForSequence(seq,anchor_id):
     ts = TagTimeStamps()
     print timePollSent
     print timePollAckReceived
     print timeRangeSent
     ts.id                   = MY_ADDRESS
+    ts.anchor_id            = anchor_id
     ts.sequence             = seq
     ts.timePollSent         = timePollSent[seq]
     ts.timePollAckReceived  = timePollAckReceived[seq]

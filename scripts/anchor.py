@@ -65,12 +65,13 @@ def controlSignalCB(signal):
             sequence = signal.sequence
             transmitPollAck(sequence)
 
-def getTimeStampForSequence(seq):
+def getTimeStampForSequence(seq,tag_id):
     ts = AnchorTimeStamps()
     print timePollReceived
     print timePollAckSent
     print timeRangeReceived
     ts.id                   = MY_ADDRESS
+    ts.tag_id               = tag_id
     ts.sequence             = seq
     ts.timePollReceived     = timePollReceived[seq]
     ts.timePollAckSent      = timePollAckSent[seq]
@@ -117,7 +118,7 @@ def checkFlags():
         elif msgType == C.RANGE:
             timeRangeReceived[sequence] = DW1000.getReceiveTimestamp()
             print "Range received for {} with timestamp {}".format(sequence, timeRangeReceived[sequence])
-            timestampPub.publish(getTimeStampForSequence(sequence))
+            timestampPub.publish(getTimeStampForSequence(sequence ,sender))
             deletePrevTimeStamps(sequence)
 
 def spin():
