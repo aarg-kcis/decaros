@@ -97,6 +97,11 @@ if __name__ == '__main__':
         tag_timemsg[i] = {}
         anchor_timemsg[i] = {}
         sequence_over[i] = {}
+    for i in tagList :
+    	for j in anchorList :
+    		tag_timemsg[i][j] = 0 
+    		anchor_timemsg[i][j] = 0
+    		sequence_over[i][j] = 0
     rospy.init_node("range", anonymous=True)
     try:
         spin()
