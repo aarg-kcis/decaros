@@ -1,0 +1,6 @@
+<launch>
+   <node name="range" pkg="decaros" type="range.py" output="screen" >
+      <param name="~anchors" type="string" value="67"/>
+      <param name="~tags" type="string" value="66"/>
+   </node>
+</launch>
