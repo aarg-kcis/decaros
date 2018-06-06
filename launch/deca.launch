@@ -2,5 +2,6 @@
    <node name="central_server" pkg="decaros" type="central_node.py" output="screen" >
       <param name="anchors" type="string" value="$(env ANCHOR_LIST)"/>
       <param name="tags" type="string" value="$(env TAG_LIST)"/>
+      <param name="timeout_time" type="string" value="$(optenv TIMEOUT 0.04)"/>
    </node>
 </launch>
