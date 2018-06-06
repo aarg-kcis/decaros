@@ -64,7 +64,8 @@ def handleReceived():
                 .format(sender, sequence, timePollReceived[sender][sequence])
     elif msgType == C.RANGE \
         and sender in timePollReceived.keys() \
-        and sequence in timePollReceived[sender].keys():
+        and sequence in timePollReceived[sender].keys() \
+        and sequence in timePollAckSent.keys():
         timeRangeReceived[sender] = {sequence : DW1000.getReceiveTimestamp()}
         print "Range received from {} for seq {} with timestamp {}"\
                 .format(sender, sequence, timeRangeReceived[sender][sequence])
@@ -101,7 +102,7 @@ def getTimeStampForSequence(seq, sender):
     return ts
 
 def deletePrevTimeStamps(seq, sender):
-    global timePollReceived, timePollAckSent, timeRangeReceived
+    global timePollReceived, timeRangeReceived
     del timePollReceived[sender]
     del timeRangeReceived[sender]
 
