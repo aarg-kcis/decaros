@@ -1,5 +1,5 @@
 <launch>
-   <node name="anchor" pkg="decaros" type="anchor.py" output="screen" >
+   <node pkg="decaros" type="anchor.py" output="screen" >
       <param name="id" value="64"/>
    </node>
 </launch>

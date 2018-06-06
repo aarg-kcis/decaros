@@ -64,8 +64,7 @@ def handleReceived():
                 .format(sender, sequence, timePollReceived[sender][sequence])
     elif msgType == C.RANGE \
         and sender in timePollReceived.keys() \
-        and sequence in timePollReceived[sender].keys() \
-        and sequence in timePollAckSent.keys():
+        and sequence in timePollReceived[sender].keys():
         timeRangeReceived[sender] = {sequence : DW1000.getReceiveTimestamp()}
         print "Range received from {} for seq {} with timestamp {}"\
                 .format(sender, sequence, timeRangeReceived[sender][sequence])
@@ -74,7 +73,6 @@ def handleReceived():
         print "TIME POLL RECEIVED", timePollReceived
         print "TIME POLL ACK SENT", timePollAckSent
         print "TIME RANGE RECEIVED", timeRangeReceived
-        # deletePrevTimeStamps(sequence, sender)
 
 def receiver():
     print "Initializing receiver"
@@ -116,19 +114,11 @@ def transmitPollAck(sequence):
     DW1000.startTransmit()
     lastSignalServiced = SEND_POLL_ACK
 
-# def checkFlags():
-#     global sequence, sentFlag, receivedFlag
-#     global timePollReceived, timePollAckSent, timeRangeReceived
-#     if sentFlag:
-#         print "Sent Data"
-#     elif receivedFlag:
-
 def spin():
     rospy.loginfo("Finding Global Positions")
     rate = rospy.Rate(RATE)
     rospy.on_shutdown(shutdown)
     while not rospy.is_shutdown():
-        # checkFlags();
         rate.sleep()
     rospy.spin()
 

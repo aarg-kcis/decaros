@@ -10,7 +10,7 @@ SEND_POLL       = 1
 SEND_POLL_ACK   = 2
 SEND_RANGE      = 3
 BROADCAST       = 0xFF
-TIMEOUT_TIME    = .25
+TIMEOUT_TIME    = .04
 RATE            = 100
 
 def init():
@@ -26,7 +26,10 @@ def init():
     rospy.Subscriber('control_reply', ControlSignalReply, controlSignalReplyCB)
 
 def controlSignalReplyCB(reply):
-    commandExecuted = (reply == expectedControlReply)
+    global commandExecuted
+    print "got reply"
+    commandExecuted = (reply == expectedControlReply) and False
+    print "command executed: ", commandExecuted
 
 def registerExepectedReply(controlsignal):
     expectedControlReply.sender     = controlsignal.sender
