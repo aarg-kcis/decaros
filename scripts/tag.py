@@ -114,6 +114,7 @@ def transmitPoll(sequence):
     print "Transmitting POLL"
     print "Data: ", [C.POLL, MY_ADDRESS, sequence, NODE_TYPE]
     DW1000.newTransmit()
+    DW1000.setDelay(REPLY_DELAY_TIME_US, C.MICROSECONDS)
     DW1000.setData([C.POLL, MY_ADDRESS, sequence, NODE_TYPE], 4)
     DW1000.startTransmit()
     lastSignalServiced = SEND_POLL
@@ -123,6 +124,7 @@ def transmitRange(address):
     print "Transmitting RANGE"
     print "Data: ", [C.RANGE, MY_ADDRESS, sequence, NODE_TYPE]
     DW1000.newTransmit()
+    DW1000.setDelay(REPLY_DELAY_TIME_US, C.MICROSECONDS)
     DW1000.setData([C.RANGE, MY_ADDRESS, sequence, NODE_TYPE], 4)
     DW1000.startTransmit()
     lastSignalServiced = SEND_RANGE
