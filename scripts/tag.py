@@ -105,9 +105,9 @@ def getTimeStampForSequence(seq, anchor):
 
 def deletePrevTimeStamps():
     global timePollSent, timePollAckReceived, timeRangeSent
-    timePollSent        = {}
-    timePollAckReceived = {}
-    timeRangeSent       = {}
+    timePollSent        = FixSizeDict(max=20)
+    timePollAckReceived = FixSizeDict(max=20)
+    timeRangeSent       = FixSizeDict(max=20)
 
 def transmitPoll(sequence):
     global lastSignalServiced
