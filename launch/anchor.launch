@@ -1,5 +1,5 @@
 <launch>
-   <node name="anchor" pkg="decaros" type="anchor.py" output="screen" >
-      <param name="id" value="67"/>
+   <node name="$(anon anchor)" pkg="decaros" type="anchor.py" output="screen" >
+      <param name="id" value="$(env ANCHOR_ID)"/>
    </node>
 </launch>

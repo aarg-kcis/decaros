@@ -75,7 +75,6 @@ def handleReceived():
         print "TIME POLL RECEIVED", timePollReceived
         print "TIME POLL ACK SENT", timePollAckSent
         print "TIME RANGE RECEIVED", timeRangeReceived
-        # deletePrevTimeStamps(sequence, sender)
 
 def receiver():
     print "Initializing receiver"
@@ -104,7 +103,7 @@ def getTimeStampForSequence(seq, sender):
     return ts
 
 def deletePrevTimeStamps(seq, sender):
-    global timePollReceived, timePollAckSent, timeRangeReceived
+    global timePollReceived, timeRangeReceived
     del timePollReceived[sender]
     del timeRangeReceived[sender]
 
@@ -118,19 +117,11 @@ def transmitPollAck(sequence):
     DW1000.startTransmit()
     lastSignalServiced = SEND_POLL_ACK
 
-# def checkFlags():
-#     global sequence, sentFlag, receivedFlag
-#     global timePollReceived, timePollAckSent, timeRangeReceived
-#     if sentFlag:
-#         print "Sent Data"
-#     elif receivedFlag:
-
 def spin():
     rospy.loginfo("Finding Global Positions")
     rate = rospy.Rate(RATE)
     rospy.on_shutdown(shutdown)
     while not rospy.is_shutdown():
-        # checkFlags();
         rate.sleep()
     rospy.spin()
 

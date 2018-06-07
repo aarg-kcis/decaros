@@ -10,7 +10,6 @@ SEND_POLL       = 1
 SEND_POLL_ACK   = 2
 SEND_RANGE      = 3
 BROADCAST       = 0xFF
-TIMEOUT_TIME    = .25
 RATE            = 100
 
 def init():
@@ -26,7 +25,10 @@ def init():
     rospy.Subscriber('control_reply', ControlSignalReply, controlSignalReplyCB)
 
 def controlSignalReplyCB(reply):
-    commandExecuted = (reply == expectedControlReply)
+    global commandExecuted
+    print "got reply"
+    commandExecuted = (reply == expectedControlReply) and False
+    print "command executed: ", commandExecuted
 
 def registerExepectedReply(controlsignal):
     expectedControlReply.sender     = controlsignal.sender
@@ -76,8 +78,9 @@ def shutdown():
 if __name__ == '__main__':
     rospy.init_node('central_node')
     init()
-    anchorList  = map(int, rospy.get_param("~anchors").split(","))
-    tagList     = map(int, rospy.get_param("~tags").split(','))
+    anchorList      = map(int, rospy.get_param("~anchors").split(","))
+    tagList         = map(int, rospy.get_param("~tags").split(','))
+    TIMEOUT_TIME    = float(rospy.get_param("~timeout_time"))
     print("Anchors: {}".format(anchorList))
     print("Tags: {}".format(tagList))
     try:
