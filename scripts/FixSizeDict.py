@@ -1,9 +1,9 @@
 from collections import OrderedDict
 
 class FixSizeDict(OrderedDict):
-    def __init__(self, *args, max=0, **kwargs):
+    def __init__(self, max=0):
             self._max = max
-            super().__init__(*args, **kwargs)
+            super(FixSizeDict, self).__init__()
 
     def __setitem__(self, key, value):
         OrderedDict.__setitem__(self, key, value)
