@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-Class FixSizeDict(OrderedDict):
+class FixSizeDict(OrderedDict):
     def __init__(self, *args, max=0, **kwargs):
             self._max = max
             super().__init__(*args, **kwargs)
