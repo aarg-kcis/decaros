@@ -4,6 +4,7 @@ import rospy
 import DW1000
 import DW1000Constants as C
 from Deca_device import DecaDevice
+from FixSizeDict import FixSizeDict
 from decaros.msg import ControlSignal
 from decaros.msg import ControlSignalReply
 from decaros.msg import TagTimeStamps
@@ -22,9 +23,9 @@ REPLY_DELAY_TIME_US = 7000
 def init():
     global replyPub, reply, sequence, lastSignalServiced, timestampPub
     global timePollSent, timePollAckReceived, timeRangeSent
-    timePollSent        = {}
-    timePollAckReceived = {}
-    timeRangeSent       = {}
+    timePollSent        = FixSizeDict(max=20)
+    timePollAckReceived = FixSizeDict(max=20)
+    timeRangeSent       = FixSizeDict(max=20)
     replyPub            = rospy.Publisher('control_reply', ControlSignalReply, queue_size=10)
     timestampPub        = rospy.Publisher('tag_timestamps', TagTimeStamps, queue_size=10)
     reply               = ControlSignalReply()
