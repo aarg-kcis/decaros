@@ -33,19 +33,17 @@ def init():
 def TagTimeStampsCB(Time_msg):
     global tag_timemsg, anchor_timemsg
     tag_timemsg[Time_msg.id][Time_msg.anchor] = Time_msg
-    # for j in anchorList :
-	if anchor_timemsg[Time_msg.id][Time_msg.anchor]!=0 :
-	    if anchor_timemsg[Time_msg.id][Time_msg.anchor].sequence == tag_timemsg[Time_msg.id][Time_msg.anchor].sequence :
-	    	getrange(Time_msg.id,Time_msg.anchor)
+    if anchor_timemsg[Time_msg.id][Time_msg.anchor]!=0 :
+        if anchor_timemsg[Time_msg.id][Time_msg.anchor].sequence == tag_timemsg[Time_msg.id][Time_msg.anchor].sequence :
+            getrange(Time_msg.id,Time_msg.anchor)
     
 
 def AnchorTimeStampsCB(Time_msg):
     global anchor_timemsg, tag_timemsg
     anchor_timemsg[Time_msg.tag][Time_msg.id] = Time_msg
-    # for i in tagList : 
-	if tag_timemsg[Time_msg.tag][Time_msg.id]!=0 :
-		if anchor_timemsg[Time_msg.tag][Time_msg.id].sequence == tag_timemsg[Time_msg.tag][Time_msg.id].sequence : 
-			getrange(Time_msg.tag,Time_msg.id)
+    if tag_timemsg[Time_msg.tag][Time_msg.id]!=0 :
+        if anchor_timemsg[Time_msg.tag][Time_msg.id].sequence == tag_timemsg[Time_msg.tag][Time_msg.id].sequence : 
+            getrange(Time_msg.tag,Time_msg.id)
 
 
 def getrange(tag_id,anchor_id):
@@ -60,6 +58,10 @@ def getrange(tag_id,anchor_id):
     
     print "round1: {}\t\t reply1:{}".format(round1, reply1)
     print "round2: {}\t\t reply2:{}".format(round2, reply2)
+
+    print "POLLS : {} \t\t PACKR : {}".format(current_Tag.timePollSent,current_Tag.timePollAckReceived)
+    print "PLRCV : {} \t\t PACKS : {}".format(current_Anchor.timePollReceived,current_Anchor.timePollAckSent)
+    print "RSENT : {} \t\t RRCVD : {}".format(current_Tag.timeRangeSent,current_Anchor.timeRangeReceived)
     
     range1 = ((round1 * round2 - reply1 * reply2) / (round1 + round2 + reply1 + reply2))
     print current_sequence
@@ -86,7 +88,7 @@ def spin():
     rate = rospy.Rate(RATE)
     rospy.on_shutdown(shutdown)
     while not rospy.is_shutdown():
-        getrange()
+        # getrange()
         rate.sleep()
     rospy.spin()
 
