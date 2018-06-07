@@ -13,10 +13,11 @@ SEND_POLL_ACK   = 2
 SEND_RANGE      = 3
 BROADCAST       = 0xFF
 TIMEOUT_TIME    = 1
-RATE            = 100
+RATE            = 1000
 NODE_TYPE       = 1 # ANCHOR
 sentFlag        = False
 receivedFlag    = False
+REPLY_DELAY_TIME_US = 7000
 
 def init():
     global replyPub, reply, sequence, lastSignalServiced, timestampPub
@@ -111,6 +112,7 @@ def transmitPollAck(sequence):
     print "Transmitting POLLACK"
     print "Data: ", [C.POLL_ACK, MY_ADDRESS, sequence, NODE_TYPE]
     DW1000.newTransmit()
+    DW1000.setDelay(REPLY_DELAY_TIME_US, C.MICROSECONDS)
     DW1000.setData([C.POLL_ACK, MY_ADDRESS, sequence, NODE_TYPE], 4)
     DW1000.startTransmit()
     lastSignalServiced = SEND_POLL_ACK

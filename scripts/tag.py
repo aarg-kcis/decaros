@@ -13,10 +13,11 @@ SEND_POLL_ACK   = 2
 SEND_RANGE      = 3
 BROADCAST       = 0xFF
 TIMEOUT_TIME    = 1
-RATE            = 100
+RATE            = 1000
 NODE_TYPE       = 0 # TAG
 sentFlag        = False
 receivedFlag    = False
+REPLY_DELAY_TIME_US = 7000
 
 def init():
     global replyPub, reply, sequence, lastSignalServiced, timestampPub

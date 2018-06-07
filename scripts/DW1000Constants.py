@@ -248,7 +248,7 @@ PREACODE_MASK2 = 0x3F
 PREACODE_MASK3 = 0x07
 
 # Set delay masks
-SET_DELAY_MASK = 0xFE
+SET_DELAY_MASK = 0xFF
 
 # get data masks
 GET_DATA_MASK = 0x03FF
