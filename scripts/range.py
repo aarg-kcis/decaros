@@ -31,44 +31,52 @@ def init():
 
 
 def TagTimeStampsCB(Time_msg):
-    global tag_timemsg
+    global tag_timemsg, anchor_timemsg
     tag_timemsg[Time_msg.id][Time_msg.anchor] = Time_msg
+    # for j in anchorList :
+	if anchor_timemsg[Time_msg.id][Time_msg.anchor]!=0 :
+	    if anchor_timemsg[Time_msg.id][Time_msg.anchor].sequence == tag_timemsg[Time_msg.id][Time_msg.anchor].sequence :
+	    	getrange(Time_msg.id,Time_msg.anchor)
     
 
 def AnchorTimeStampsCB(Time_msg):
-    global anchor_timemsg
-    anchor_timemsg[Time_msg.tag][Time_msg.id]= Time_msg
+    global anchor_timemsg, tag_timemsg
+    anchor_timemsg[Time_msg.tag][Time_msg.id] = Time_msg
+    # for i in tagList : 
+	if tag_timemsg[Time_msg.tag][Time_msg.id]!=0 :
+		if anchor_timemsg[Time_msg.id][Time_msg.anchor].sequence == tag_timemsg[Time_msg.id][Time_msg.anchor].sequence : 
+			getrange(Time_msg.tag,Time_msg.id)
 
 
-
-def getrange():
+def getrange(tag_id,anchor_id):
     global current_sequence,tag_timemsg,anchor_timemsg,round1,round2,reply1,reply2,calc_done_flag,sequence_over
+    current_Anchor = anchor_timemsg[tag_id][anchor_id]
+    current_Tag = tag_timemsg[tag_id][anchor_id]
+    current_sequence = current_Tag.sequence
+    round1 = DW1000.wrapTimestamp(current_Tag.timePollAckReceived - current_Tag.timePollSent)
+    reply1 = DW1000.wrapTimestamp(current_Anchor.timePollAckSent - current_Anchor.timePollReceived)
+    round2 = DW1000.wrapTimestamp(current_Anchor.timeRangeReceived - current_Anchor.timePollAckSent)
+    reply2 = DW1000.wrapTimestamp(current_Tag.timeRangeSent - current_Tag.timePollAckReceived)
+    
+    print "round1: {}\t\t reply1:{}".format(round1, reply1)
+    print "round2: {}\t\t reply2:{}".format(round2, reply2)
+    
+    range1 = ((round1 * round2 - reply1 * reply2) / (round1 + round2 + reply1 + reply2))
+    print current_sequence
+    print range1
+    print "Range between {} and {}".format(i,j)
+    print ((abs(range1) % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO)
+    print "------"
+    # sequence_over[i][j] = current_sequence
 
 
-    for i in tagList :
-        for j in anchorList :
-        	if tag_timemsg[i][j]!=0 and anchor_timemsg[i][j]!=0 : 
-	            if tag_timemsg[i][j].sequence==anchor_timemsg[i][j].sequence :
-	                current_sequence = tag_timemsg[i][j].sequence
+    # for i in tagList :
+    #     for j in anchorList :
+    #     	if tag_timemsg[i][j]!=0 and anchor_timemsg[i][j]!=0 : 
+	   #          if tag_timemsg[i][j].sequence==anchor_timemsg[i][j].sequence :
+	   #              current_sequence = tag_timemsg[i][j].sequence
 
-	                if sequence_over[i][j]!=current_sequence:# and current_sequence in anchor_timemsg.keys() and current_sequence in tag_timemsg.keys():
-	                    current_Anchor = anchor_timemsg[i][j]
-	                    current_Tag = tag_timemsg[i][j]
-	                    round1 = DW1000.wrapTimestamp(current_Tag.timePollAckReceived - current_Tag.timePollSent)
-	                    reply1 = DW1000.wrapTimestamp(current_Anchor.timePollAckSent - current_Anchor.timePollReceived)
-	                    round2 = DW1000.wrapTimestamp(current_Anchor.timeRangeReceived - current_Anchor.timePollAckSent)
-	                    reply2 = DW1000.wrapTimestamp(current_Tag.timeRangeSent - current_Tag.timePollAckReceived)
-	                    
-	                    print "round1: {}\t\t reply1:{}".format(round1, reply1)
-	                    print "round2: {}\t\t reply2:{}".format(round2, reply2)
-	                    
-	                    range1 = ((round1 * round2 - reply1 * reply2) / (round1 + round2 + reply1 + reply2))
-	                    print current_sequence
-	                    print range1
-	                    print "Range between {} and {}".format(i,j)
-	                    print ((abs(range1) % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO)
-	                    print "------"
-	                    sequence_over[i][j] = current_sequence
+	   #              if sequence_over[i][j]!=current_sequence:# and current_sequence in anchor_timemsg.keys() and current_sequence in tag_timemsg.keys():
                     
 
 
