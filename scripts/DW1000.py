@@ -46,7 +46,7 @@ def begin(irq):
     time.sleep(C.INIT_DELAY)
     GPIO.setmode(GPIO.BCM)
     spi.open(0, 0)
-    spi.max_speed_hz = 4000000
+    spi.max_speed_hz = 1000000
     _deviceMode = C.IDLE_MODE
     GPIO.setup(irq, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
@@ -98,6 +98,9 @@ def handleInterrupt(channel):
     if transmitDone:
         callbacks["handleSent"]()
         clearTransmitStatus()
+        if _permanentReceive:
+            newReceive()
+            startReceive()
     if receiveTimeStampAvailable:
         setBit(_sysstatus, 5, C.LDEDONE_BIT, True)
         writeBytes(C.SYS_STATUS, C.NO_SUB, _sysstatus, 5)
