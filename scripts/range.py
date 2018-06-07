@@ -44,7 +44,7 @@ def AnchorTimeStampsCB(Time_msg):
     anchor_timemsg[Time_msg.tag][Time_msg.id] = Time_msg
     # for i in tagList : 
 	if tag_timemsg[Time_msg.tag][Time_msg.id]!=0 :
-		if anchor_timemsg[Time_msg.id][Time_msg.anchor].sequence == tag_timemsg[Time_msg.id][Time_msg.anchor].sequence : 
+		if anchor_timemsg[Time_msg.tag][Time_msg.id].sequence == tag_timemsg[Time_msg.tag][Time_msg.id].sequence : 
 			getrange(Time_msg.tag,Time_msg.id)
 
 
