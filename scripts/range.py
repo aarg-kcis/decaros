@@ -79,8 +79,8 @@ def getrange():
 					    print "round1: {}\t\t reply1:{}".format(round1, reply1)
 					    print "round2: {}\t\t reply2:{}".format(round2, reply2)
 
-					    print "POLLS : {} \t\t PACKR : {}".format(current_Tag.timePollSent,current_Tag.timePollAckReceived)
-					    print "PLRCV : {} \t\t PACKS : {}".format(current_Anchor.timePollReceived,current_Anchor.timePollAckSent)
+					    print "POLLS : {} \t\t PLRCV : {}".format(current_Tag.timePollSent,current_Anchor.timePollReceived)
+					    print "PACKR : {} \t\t PACKS : {}".format(current_Tag.timePollAckReceived,current_Anchor.timePollAckSent)
 					    print "RSENT : {} \t\t RRCVD : {}".format(current_Tag.timeRangeSent,current_Anchor.timeRangeReceived)
 					    
 					    range1 = ((round1 * round2 - reply1 * reply2) / (round1 + round2 + reply1 + reply2))
