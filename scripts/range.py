@@ -67,8 +67,8 @@ def getrange():
 
 	                if sequence_over[i][j]!=current_sequence:# and current_sequence in anchor_timemsg.keys() and current_sequence in tag_timemsg.keys():
 					    global current_sequence,tag_timemsg,anchor_timemsg,round1,round2,reply1,reply2,calc_done_flag,sequence_over
-					    current_Anchor = anchor_timemsg[tag_id][anchor_id]
-					    current_Tag = tag_timemsg[tag_id][anchor_id]
+					    current_Anchor = anchor_timemsg[i][j]
+					    current_Tag = tag_timemsg[i][j]
 					    current_sequence = current_Tag.sequence
 					    round1 = DW1000.wrapTimestamp(current_Tag.timePollAckReceived - current_Tag.timePollSent)
 					    reply1 = DW1000.wrapTimestamp(current_Anchor.timePollAckSent - current_Anchor.timePollReceived)
