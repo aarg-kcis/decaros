@@ -39,15 +39,15 @@ def initDW1000():
     DW1000.begin(PIN_IRQ)
     DW1000.setup(PIN_SS)
     DW1000.generalConfiguration("7D:00:22:EA:82:60:3B:9C", C.MODE_LONGDATA_FAST_ACCURACY)
-    # DW1000.registerCallback("handleSent", handleSent)
+    DW1000.registerCallback("handleSent", handleSent)
     DW1000.registerCallback("handleReceived", handleReceived)
     DW1000.setAntennaDelay(C.ANTENNA_DELAY_RASPI)
     receiver()
 
 def handleSent():
-    global sentFlag
-    sentFlag = True
-    print "At handlesent"
+    # global sentFlag
+    # sentFlag = True
+    # print "At handlesent"
     
 
 def handleReceived():
