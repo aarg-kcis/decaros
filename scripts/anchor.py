@@ -94,7 +94,7 @@ def transmitPollAck(sequence):
     lastSignalServiced = SEND_POLL_ACK
 
 def checkflag() :
-    global timePollAckSent,sentFlag,receivedFlag,timePollReceived, timeRangeReceived
+    global timePollAckSent,sentFlag,receivedFlag,timePollReceived, timeRangeReceived,sequence
     if sentFlag :
         sentFlag = False
         reply.sender    = MY_ADDRESS
