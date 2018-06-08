@@ -6,6 +6,7 @@ from Deca_device import DecaDevice
 from decaros.msg import AnchorTimeStamps
 from decaros.msg import TagTimeStamps
 import time
+import DW1000
 
 Tag_seq         = 0
 Anchor_seq      = 0
