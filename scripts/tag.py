@@ -39,7 +39,7 @@ def initDW1000():
     DW1000.begin(PIN_IRQ)
     DW1000.setup(PIN_SS)
     DW1000.generalConfiguration("7D:00:22:EA:82:60:3B:9C", C.MODE_LONGDATA_FAST_ACCURACY)
-    DW1000.registerCallback("handleSent", handleSent)
+    # DW1000.registerCallback("handleSent", handleSent)
     DW1000.registerCallback("handleReceived", handleReceived)
     DW1000.setAntennaDelay(C.ANTENNA_DELAY_RASPI)
     receiver()
@@ -47,6 +47,7 @@ def initDW1000():
 def handleSent():
     global sentFlag
     sentFlag = True
+    print "At handlesent"
     
 
 def handleReceived():
@@ -97,6 +98,7 @@ def transmitPoll(sequence):
     DW1000.setData([C.POLL, MY_ADDRESS, sequence, NODE_TYPE], 4)
     DW1000.startTransmit()
     lastSignalServiced = SEND_POLL
+    sentFlag = True
 
 def transmitRange(address):
     global lastSignalServiced
@@ -107,6 +109,7 @@ def transmitRange(address):
     DW1000.setData([C.RANGE, MY_ADDRESS, sequence, NODE_TYPE], 4)
     DW1000.startTransmit()
     lastSignalServiced = SEND_RANGE
+    sentFlag = True
 
 def checkFlags():
     global sequence, sentFlag, receivedFlag,timeRangeSent, timePollSent, timePollAckReceived
