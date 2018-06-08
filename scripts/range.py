@@ -58,7 +58,7 @@ def wrapTimestamp(timestamp):
         timestamp += C.TIME_OVERFLOW
     return timestamp
 
-def getrange(tag_id,anchor_id):
+def getrange():
     for i in tagList :
         for j in anchorList :
         	if tag_timemsg[i][j]!=0 and anchor_timemsg[i][j]!=0 : 
@@ -97,7 +97,7 @@ def spin():
     rate = rospy.Rate(RATE)
     rospy.on_shutdown(shutdown)
     while not rospy.is_shutdown():
-        # getrange()
+        getrange()
         rate.sleep()
     rospy.spin()
 
