@@ -63,23 +63,23 @@ def getrange(tag_id,anchor_id):
     current_Anchor = anchor_timemsg[tag_id][anchor_id]
     current_Tag = tag_timemsg[tag_id][anchor_id]
     current_sequence = current_Tag.sequence
-    round1 = DW1000.wrapTimestamp(current_Tag.timePollAckReceived - current_Tag.timePollSent)
-    reply1 = DW1000.wrapTimestamp(current_Anchor.timePollAckSent - current_Anchor.timePollReceived)
-    round2 = DW1000.wrapTimestamp(current_Anchor.timeRangeReceived - current_Anchor.timePollAckSent)
-    reply2 = DW1000.wrapTimestamp(current_Tag.timeRangeSent - current_Tag.timePollAckReceived)
+    round1 = wrapTimestamp(current_Tag.timePollAckReceived - current_Tag.timePollSent)
+    reply1 = wrapTimestamp(current_Anchor.timePollAckSent - current_Anchor.timePollReceived)
+    round2 = wrapTimestamp(current_Anchor.timeRangeReceived - current_Anchor.timePollAckSent)
+    reply2 = wrapTimestamp(current_Tag.timeRangeSent - current_Tag.timePollAckReceived)
     
     print "round1: {}\t\t reply1:{}".format(round1, reply1)
     print "round2: {}\t\t reply2:{}".format(round2, reply2)
 
-    print "POLLS : {} \t\t PACKR : {}".format(current_Tag.timePollSent,current_Tag.timePollAckReceived)
-    print "PLRCV : {} \t\t PACKS : {}".format(current_Anchor.timePollReceived,current_Anchor.timePollAckSent)
+    print "POLLS : {} \t\t POLLR : {}".format(current_Tag.timePollSent,current_Anchor.timePollReceived)
+    print "PACKR : {} \t\t PACKS : {}".format(current_Tag.timePollAckReceived,current_Anchor.timePollAckSent)
     print "RSENT : {} \t\t RRCVD : {}".format(current_Tag.timeRangeSent,current_Anchor.timeRangeReceived)
     
     range1 = ((round1 * round2 - reply1 * reply2) / (round1 + round2 + reply1 + reply2))
     print current_sequence
     print range1
-    print "Range between {} and {}".format(i,j)
-    print ((abs(range1) % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO)
+    print "Range between {} and {}".format(tag_id,anchor_id)
+    print (range1 % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO
     print "------"
     # sequence_over[i][j] = current_sequence
 
