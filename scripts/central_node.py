@@ -56,9 +56,8 @@ def startRanging():
         wait(time.time())
 
     for tagAddress in tagList:
-        for anchorAddress in anchorList:
-            sendControlSignal(sequence, SEND_RANGE, tagAddress, anchorAddress)
-            wait(time.time())
+        sendControlSignal(sequence, SEND_RANGE, tagAddress)
+        wait(time.time())
 
 def spin():
     global sequence
