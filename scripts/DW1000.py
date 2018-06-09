@@ -970,7 +970,7 @@ def getReceiveTimestamp():
     timestamp = 0
     for i in range(0, 5):
         timestamp |= rxTimeBytes[i] << (i * 8)
-    timestamp = int(round(correctTimestamp(timestamp)))
+    # timestamp = int(round(correctTimestamp(timestamp)))
     
     return timestamp
 
