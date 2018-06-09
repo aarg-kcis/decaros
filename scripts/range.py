@@ -6,6 +6,7 @@ from Deca_device import DecaDevice
 from decaros.msg import AnchorTimeStamps
 from decaros.msg import TagTimeStamps
 import time
+import DW1000
 
 Tag_seq         = 0
 Anchor_seq      = 0
@@ -32,17 +33,17 @@ def init():
 def TagTimeStampsCB(Time_msg):
     global tag_timemsg, anchor_timemsg
     tag_timemsg[Time_msg.id][Time_msg.anchor] = Time_msg
-    if anchor_timemsg[Time_msg.id][Time_msg.anchor]!=0 :
-        if anchor_timemsg[Time_msg.id][Time_msg.anchor].sequence == tag_timemsg[Time_msg.id][Time_msg.anchor].sequence :
-            getrange(Time_msg.id,Time_msg.anchor)
+    # if anchor_timemsg[Time_msg.id][Time_msg.anchor]!=0 :
+    #     if anchor_timemsg[Time_msg.id][Time_msg.anchor].sequence == tag_timemsg[Time_msg.id][Time_msg.anchor].sequence :
+    #         getrange(Time_msg.id,Time_msg.anchor)
     
 
 def AnchorTimeStampsCB(Time_msg):
     global anchor_timemsg, tag_timemsg
     anchor_timemsg[Time_msg.tag][Time_msg.id] = Time_msg
-    if tag_timemsg[Time_msg.tag][Time_msg.id]!=0 :
-        if anchor_timemsg[Time_msg.tag][Time_msg.id].sequence == tag_timemsg[Time_msg.tag][Time_msg.id].sequence : 
-            getrange(Time_msg.tag,Time_msg.id)
+    # if tag_timemsg[Time_msg.tag][Time_msg.id]!=0 :
+    #     if anchor_timemsg[Time_msg.tag][Time_msg.id].sequence == tag_timemsg[Time_msg.tag][Time_msg.id].sequence : 
+    #         getrange(Time_msg.tag,Time_msg.id)
 
 def wrapTimestamp(timestamp):
     """
@@ -81,23 +82,13 @@ def getrange(tag_id,anchor_id):
     print "Range between {} and {}".format(tag_id,anchor_id)
     print (range1 % C.TIME_OVERFLOW) * C.DISTANCE_OF_RADIO
     print "------"
-    # sequence_over[i][j] = current_sequence
-
-
-    # for i in tagList :
-    #     for j in anchorList :
-    #     	if tag_timemsg[i][j]!=0 and anchor_timemsg[i][j]!=0 : 
-	   #          if tag_timemsg[i][j].sequence==anchor_timemsg[i][j].sequence :
-	   #              current_sequence = tag_timemsg[i][j].sequence
-
-	   #              if sequence_over[i][j]!=current_sequence:# and current_sequence in anchor_timemsg.keys() and current_sequence in tag_timemsg.keys():
 
 def spin():
     rospy.loginfo("Finding Global Positions")
     rate = rospy.Rate(RATE)
     rospy.on_shutdown(shutdown)
     while not rospy.is_shutdown():
-        # getrange()
+        getrange()
         rate.sleep()
     rospy.spin()
 
