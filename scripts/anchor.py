@@ -25,7 +25,7 @@ def init():
     global timePollReceived, timePollAckSent, timeRangeReceived
     timePollReceived    = FixSizeDict(max=20)
     timePollAckSent     = FixSizeDict(max=20)
-    timeRangeReceived   = FixSizeDict(max=20)
+    # timeRangeReceived   = FixSizeDict(max=20)
     replyPub            = rospy.Publisher('control_reply', ControlSignalReply, queue_size=10)
     timestampPub        = rospy.Publisher('anchor_timestamps', AnchorTimeStamps, queue_size=10)
     reply               = ControlSignalReply()
@@ -64,18 +64,18 @@ def handleReceived():
         timePollReceived[sender] = {sequence : DW1000.getReceiveTimestamp()}
         print "Poll received from {} for seq {} with timestamp {}"\
                 .format(sender, sequence, timePollReceived[sender][sequence])
-    elif msgType == C.RANGE \
-        and sender in timePollReceived.keys() \
-        and sequence in timePollReceived[sender].keys() \
-        and sequence in timePollAckSent.keys():
-        timeRangeReceived[sender] = {sequence : DW1000.getReceiveTimestamp()}
-        print "Range received from {} for seq {} with timestamp {}"\
-                .format(sender, sequence, timeRangeReceived[sender][sequence])
-        timestampPub.publish(getTimeStampForSequence(sequence, sender))
-    else:
-        print "TIME POLL RECEIVED", timePollReceived
-        print "TIME POLL ACK SENT", timePollAckSent
-        print "TIME RANGE RECEIVED", timeRangeReceived
+    # elif msgType == C.RANGE \
+    #     and sender in timePollReceived.keys() \
+    #     and sequence in timePollReceived[sender].keys() \
+    #     and sequence in timePollAckSent.keys():
+    #     timeRangeReceived[sender] = {sequence : DW1000.getReceiveTimestamp()}
+    #     print "Range received from {} for seq {} with timestamp {}"\
+    #             .format(sender, sequence, timeRangeReceived[sender][sequence])
+    #     timestampPub.publish(getTimeStampForSequence(sequence, sender))
+    # else:
+    #     print "TIME POLL RECEIVED", timePollReceived
+    #     print "TIME POLL ACK SENT", timePollAckSent
+    #     print "TIME RANGE RECEIVED", timeRangeReceived
 
 def receiver():
     print "Initializing receiver"

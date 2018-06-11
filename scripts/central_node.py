@@ -26,9 +26,9 @@ def init():
 
 def controlSignalReplyCB(reply):
     global commandExecuted
-    print "got reply"
+    # print "got reply"
     commandExecuted = (reply == expectedControlReply) and False
-    print "command executed: ", commandExecuted
+    # print "command executed: ", commandExecuted
 
 def registerExepectedReply(controlsignal):
     expectedControlReply.sender     = controlsignal.sender
@@ -55,9 +55,9 @@ def startRanging():
         sendControlSignal(sequence, SEND_POLL_ACK, anchorAddress)
         wait(time.time())
 
-    for tagAddress in tagList:
-        sendControlSignal(sequence, SEND_RANGE, tagAddress)
-        wait(time.time())
+    # for tagAddress in tagList:
+    #     sendControlSignal(sequence, SEND_RANGE, tagAddress)
+    #     wait(time.time())
 
 def spin():
     global sequence
