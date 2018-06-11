@@ -25,7 +25,7 @@ def init():
     global timePollReceived, timePollAckSent, timeRangeReceived
     timePollReceived    = FixSizeDict(max=20)
     timePollAckSent     = FixSizeDict(max=20)
-    # timeRangeReceived   = FixSizeDict(max=20)
+    # timeRangeReceived   = FixSizeDict(max=20
     replyPub            = rospy.Publisher('control_reply', ControlSignalReply, queue_size=10)
     timestampPub        = rospy.Publisher('anchor_timestamps', AnchorTimeStamps, queue_size=10)
     reply               = ControlSignalReply()
