@@ -82,7 +82,7 @@ def handleReceived():
         skew_v = -1*(2**19-skew_v)
     rxtcki = [0]*4
     DW1000.readBytes(0x13, 0x00, rxtcki, 4)
-    for i in range(0, 3):
+    for i in range(0, 4):
         rxtcki_v |= rxtcki[i] << (i * 8)
     clockOffset = skew_v * 1e6 / rxtcki_v
     print "rxtcki: {}\nskew: {}".format(rxtcki_v, skew_v)
