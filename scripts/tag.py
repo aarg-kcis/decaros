@@ -3,7 +3,6 @@
 import rospy
 import DW1000
 import DW1000Constants as C
-from Deca_device import DecaDevice
 from FixSizeDict import FixSizeDict
 from decaros.msg import ControlSignal
 from decaros.msg import ControlSignalReply
