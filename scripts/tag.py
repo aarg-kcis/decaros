@@ -73,17 +73,19 @@ def handleReceived():
     print "Poll Ack received from {} for {} with timestamp {}"\
             .format(sender, sequence, timePollAckReceived[sender][sequence])
     skew = [0]*3
-    skew_v, rxtcki_v = 0,0
+    skew_v, rxtcki_v = 0, 0
     DW1000.readBytes(0x14, 0x00, skew, 3)
-    sign = skew[2] & 0x08
-    skew[2] = skew[2] & 0x07
+    sign = skew[2] & 0x04
     for i in range(0, 3):
         skew_v |= skew[i] << (i * 8)
+    if sign:
+        skew_v = -1*(2**19-skew_v)
     rxtcki = [0]*4
     DW1000.readBytes(0x13, 0x00, rxtcki, 4)
     for i in range(0, 3):
         rxtcki_v |= rxtcki[i] << (i * 8)
     clockOffset = skew_v * 1e6 / rxtcki_v
+    print "rxtcki: {}\nskew: {}".format(rxtcki_v, skew_v)
     print "clockOffset: ", clockOffset
 
 
